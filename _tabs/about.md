@@ -7,13 +7,13 @@ order: 4
 ---
 #### I like to break things.
 
-```terminal
+```
 44@macbookpro:~ $ neofetch
                     'c.          44@macbookpro.local
                  ,xNMM.          -------------
                .OMMMMo           OS: macOS 12.6.6 21G646 x86_64
                OMMM0,            Host: MacBookPro12,1
-     .;loddo:`' loolloddol;.      Kernel: 21.6.0`
+     .;loddo:' loolloddol;.      Kernel: 21.6.0
    cKMMMMMMMMMMNWMMMMMMMMMM0:    Uptime: 487 days, 3 hours, 12 mins
  .KMMMMMMMMMMMMMMMMMMMMMMMWd.    Packages: 234 (brew)
  XMMMMMMMMMMMMMMMMMMMMMMMX.      Shell: sh
@@ -32,3 +32,4 @@ order: 4
 
 Professional procrastinator, part time developer, full time coin collector.
 ```
+{: file='terminal'}
