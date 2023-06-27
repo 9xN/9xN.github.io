@@ -22,8 +22,7 @@ title: 44 collective # the main title
 
 tagline: ovh / 342 / 258 # it will display as the sub-title
 
-description: >- # used by seo meta and the atom feed
-Professional procrastinator, part time developer, full time coin collector.
+description: Professional procrastinator, part time developer, full time coin collector.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: "https://44.is-a.dev"
