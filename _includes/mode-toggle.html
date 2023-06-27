@@ -1,5 +1,4 @@
 <!-- Switch the mode between dark and light. -->
-
 <script type="text/javascript">
   class ModeToggle {
     static get MODE_KEY() {
@@ -20,29 +19,33 @@
 
     constructor() {
       if (this.hasMode) {
-        if (this.isDarkMode) {
-          if (!this.isSysDarkPrefer) {
-            this.setDark();
-          }
-        } else {
-          if (this.isSysDarkPrefer) {
+        if (this.isLightMode) {
+          if (!this.isSysLightPrefer) {
             this.setLight();
           }
+        } else {
+          if (this.isSysLightPrefer) {
+            this.setDark();
+          }
+        }
+      } else {
+        if (!this.isSysLightPrefer) {
+          this.setLight();
         }
       }
 
       let self = this;
 
       /* always follow the system prefers */
-      this.sysDarkPrefers.addEventListener('change', () => {
+      this.sysLightPrefers.addEventListener('change', () => {
         if (self.hasMode) {
-          if (self.isDarkMode) {
-            if (!self.isSysDarkPrefer) {
-              self.setDark();
+          if (self.isLightMode) {
+            if (!self.isSysLightPrefer) {
+              self.setLight();
             }
           } else {
-            if (self.isSysDarkPrefer) {
-              self.setLight();
+            if (self.isSysLightPrefer) {
+              self.setDark();
             }
           }
 
@@ -53,12 +56,12 @@
       });
     } /* constructor() */
 
-    get sysDarkPrefers() {
-      return window.matchMedia('(prefers-color-scheme: dark)');
+    get sysLightPrefers() {
+      return window.matchMedia('(prefers-color-scheme: light)');
     }
 
-    get isSysDarkPrefer() {
-      return this.sysDarkPrefers.matches;
+    get isSysLightPrefer() {
+      return this.sysLightPrefers.matches;
     }
 
     get isDarkMode() {
@@ -79,10 +82,10 @@
 
     /* get the current mode on screen */
     get modeStatus() {
-      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
-        return ModeToggle.DARK_MODE;
-      } else {
+      if (this.isLightMode || (!this.hasMode && this.isSysLightPrefer)) {
         return ModeToggle.LIGHT_MODE;
+      } else {
+        return ModeToggle.DARK_MODE;
       }
     }
 
@@ -101,7 +104,7 @@
       sessionStorage.removeItem(ModeToggle.MODE_KEY);
     }
 
-    /* Notify another plugins that the theme mode has changed */
+    /* Notify other plugins that the theme mode has changed */
     notify() {
       window.postMessage(
         {
@@ -114,24 +117,24 @@
 
     flipMode() {
       if (this.hasMode) {
-        if (this.isSysDarkPrefer) {
-          if (this.isLightMode) {
-            this.clearMode();
-          } else {
-            this.setLight();
-          }
-        } else {
+        if (this.isSysLightPrefer) {
           if (this.isDarkMode) {
             this.clearMode();
           } else {
             this.setDark();
           }
+        } else {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
         }
       } else {
-        if (this.isSysDarkPrefer) {
-          this.setLight();
-        } else {
+        if (this.isSysLightPrefer) {
           this.setDark();
+        } else {
+          this.setLight();
         }
       }
 
