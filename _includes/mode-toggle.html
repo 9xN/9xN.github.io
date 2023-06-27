@@ -18,50 +18,20 @@
     }
 
     constructor() {
-      if (this.hasMode) {
-        if (this.isLightMode) {
-          if (!this.isSysLightPrefer) {
-            this.setLight();
-          }
-        } else {
-          if (this.isSysLightPrefer) {
-            this.setDark();
-          }
-        }
-      } else {
-        if (!this.isSysLightPrefer) {
-          this.setLight();
-        }
+      if (!this.hasMode) {
+        this.setDark(); // Set dark mode as the default
       }
 
       let self = this;
 
-      /* always follow the system prefers */
-      this.sysLightPrefers.addEventListener('change', () => {
-        if (self.hasMode) {
-          if (self.isLightMode) {
-            if (!self.isSysLightPrefer) {
-              self.setLight();
-            }
-          } else {
-            if (self.isSysLightPrefer) {
-              self.setDark();
-            }
-          }
-
-          self.clearMode();
-        }
-
-        self.notify();
+      /* Always follow the user's preference */
+      this.modeToggleElement.addEventListener('click', () => {
+        self.flipMode();
       });
-    } /* constructor() */
-
-    get sysLightPrefers() {
-      return window.matchMedia('(prefers-color-scheme: light)');
     }
 
-    get isSysLightPrefer() {
-      return this.sysLightPrefers.matches;
+    get modeToggleElement() {
+      return document.getElementById(ModeToggle.ID);
     }
 
     get isDarkMode() {
@@ -80,22 +50,24 @@
       return sessionStorage.getItem(ModeToggle.MODE_KEY);
     }
 
-    /* get the current mode on screen */
+    /* Get the current mode on screen */
     get modeStatus() {
-      if (this.isLightMode || (!this.hasMode && this.isSysLightPrefer)) {
-        return ModeToggle.LIGHT_MODE;
-      } else {
-        return ModeToggle.DARK_MODE;
-      }
+      return this.isDarkMode ? ModeToggle.DARK_MODE : ModeToggle.LIGHT_MODE;
     }
 
     setDark() {
-      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      document.documentElement.setAttribute(
+        ModeToggle.MODE_ATTR,
+        ModeToggle.DARK_MODE
+      );
       sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
     }
 
     setLight() {
-      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      document.documentElement.setAttribute(
+        ModeToggle.MODE_ATTR,
+        ModeToggle.LIGHT_MODE
+      );
       sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
     }
 
@@ -109,38 +81,21 @@
       window.postMessage(
         {
           direction: ModeToggle.ID,
-          message: this.modeStatus
+          message: this.modeStatus,
         },
         '*'
       );
     }
 
     flipMode() {
-      if (this.hasMode) {
-        if (this.isSysLightPrefer) {
-          if (this.isDarkMode) {
-            this.clearMode();
-          } else {
-            this.setDark();
-          }
-        } else {
-          if (this.isLightMode) {
-            this.clearMode();
-          } else {
-            this.setLight();
-          }
-        }
+      if (this.isDarkMode) {
+        this.setLight();
       } else {
-        if (this.isSysLightPrefer) {
-          this.setDark();
-        } else {
-          this.setLight();
-        }
+        this.setDark();
       }
-
       this.notify();
-    } /* flipMode() */
-  } /* ModeToggle */
+    }
+  }
 
   const modeToggle = new ModeToggle();
 </script>
