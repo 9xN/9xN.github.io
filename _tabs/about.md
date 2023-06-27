@@ -3,10 +3,10 @@
 icon: fas fa-info-circle
 order: 4
 ---
-
+---
 #### I like to break things.
 
-```terminal
+```
 44@macbookpro:~ $ neofetch
                     'c.          44@macbookpro.local
                  ,xNMM.          -------------
