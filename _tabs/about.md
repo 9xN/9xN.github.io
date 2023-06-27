@@ -3,10 +3,9 @@
 icon: fas fa-info-circle
 order: 4
 ---
-![](/assets/img/media/avatar.jpg)
----
-#### I like to break things.
+![](/assets/img/media/avatar.jpg){: width="300" height="300" }
 
+---
 ```
 44@macbookpro:~ $ neofetch
                     'c.          44@macbookpro.local
