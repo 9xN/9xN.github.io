@@ -1,11 +1,10 @@
 ---
-title: Getting Started With Git: A Comprehensive Guide for Beginners
+title: "Getting Started With Git: A Comprehensive Guide for Beginners"
 author: 44
 date: 2023-06-04 21:37
-categories: [General, Guides, Begginner]
-tags: [Development, Coding, Organization, Tools, Beginner]
-image:
-  path: /assets/img/media/git-header.jpg
+categories: [Development, Guides]
+tags: [development, coding, organization, tools, beginner]
+image: /assets/img/media/git-header.jpg
 ---
 
 ---
