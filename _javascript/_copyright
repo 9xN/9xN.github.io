@@ -1,0 +1,3 @@
+44 collective v<%= pkg.version %> (<%= pkg.homepage %>)
+© 2023 <%= pkg.author %>
+<%= pkg.license %> Licensed
