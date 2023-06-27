@@ -6,7 +6,7 @@ order: 4
 ---
 #### I like to break things.
 
-```
+```console
 44@macbookpro:~ $ neofetch
                     'c.          44@macbookpro.local
                  ,xNMM.          -------------
