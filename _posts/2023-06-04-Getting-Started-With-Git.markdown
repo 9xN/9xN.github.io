@@ -13,7 +13,10 @@ Git is the most powerful and useful version control system that has revolutioniz
 
 ---
 
-## Table of Contents
+<details>
+
+  <summary markdown="span" >## Table of Contents</summary>
+<div markdown="1">
 
 - [What is Git?](#what-is-git)
 - [Installing Git](#installing-git)
@@ -67,6 +70,8 @@ Git is the most powerful and useful version control system that has revolutioniz
     - [Command-Line Interface (CLI)](#command-line-interface-cli)
 - [Conclusion](#conclusion)
 
+</div>
+</details>
 
 ## What is Git
 
