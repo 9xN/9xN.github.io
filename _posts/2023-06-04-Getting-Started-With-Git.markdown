@@ -113,12 +113,12 @@ After installing Git, it's important to configure it with your name and email ad
 ### **Setting Name and Email Address:**
    - Open a command prompt, Git Bash, or Terminal window.
    - To set your name, type the following command:
-     ```
+     ```terminal
      git config --global user.name "Your Name"
      ```
    - Replace "Your Name" with your actual name (e.g., John Doe).
    - To set your email address, type the following command:
-     ```
+     ```terminal
      git config --global user.email "youremail@example.com"
      ```
    - Replace "youremail@example.com" with your email address.
@@ -127,17 +127,17 @@ After installing Git, it's important to configure it with your name and email ad
 ### **Customizing Git Settings:**
    - Git provides various settings that you can customize based on your preferences.
    - To view your current Git configuration, including all settings, type:
-     ```
+     ```terminal
      git config --list
      ```
    - This command will display a list of your Git configuration settings.
    - To customize a specific setting, use the following command:
-     ```
+     ```terminal
      git config --global <setting> <value>
      ```
    - Replace `<setting>` with the name of the setting you want to modify and `<value>` with the desired value.
    - For example, to set your preferred text editor to Visual Studio Code, you can use:
-     ```
+     ```terminal
      git config --global core.editor "code --wait"
      ```
    - This command sets the `core.editor` setting to "code --wait", which opens Visual Studio Code as the default text editor for Git operations.
@@ -161,7 +161,7 @@ To start using Git, you need to create a Git repository. This section will expla
    - Open a command prompt, Git Bash, or Terminal window.
    - Navigate to the directory where you want to create the Git repository. You can use the `cd` command to change directories.
    - To initialize a new repository, run the following command:
-     ```
+     ```terminal
      git init
      ```
    - This command initializes an empty Git repository in the current directory. You will see a message confirming the successful initialization.
@@ -170,7 +170,7 @@ To start using Git, you need to create a Git repository. This section will expla
    - Once you have initialized a repository, you can start adding files to it.
    - Place the files you want to include in the repository in the repository's directory or subdirectories.
    - To add files to the staging area, which prepares them for commit, use the following command:
-     ```
+     ```terminal
      git add <file1> <file2> ...
      ```
    - Replace `<file1>`, `<file2>`, etc., with the names of the files you want to add. You can also use `.` to add all files in the current directory.
@@ -185,7 +185,7 @@ To start using Git, you need to create a Git repository. This section will expla
 
 ### **Committing Changes:**
    - To commit the changes in the staging area, use the following command:
-     ```
+     ```terminal
      git commit -m "Commit message"
      ```
    - Replace `"Commit message"` with a descriptive message that explains the changes made in the commit.
@@ -215,7 +215,7 @@ When reviewing modifications, it's important to use these commands in conjunctio
    - Specify patterns for files or directories to be ignored, such as build artifacts, temporary files, or sensitive information.
    - Maintain an up-to-date `.gitignore` file to keep your repository clean and focused on essential code and assets.
    - An example `.gitignore` file might look like this:
-     ```
+     ```terminal
      # Ignore node_modules directory
      node_modules/
 
@@ -230,7 +230,7 @@ Branching allows you to create separate lines of development. This section will 
 
 ### **Creating a Branch:**
    - To create a new branch, use the following command:
-     ```
+     ```terminal
      git branch <branch-name>
      ```
    - Replace `<branch-name>` with a descriptive name for your new branch.
@@ -238,7 +238,7 @@ Branching allows you to create separate lines of development. This section will 
 
 ### **Switching Branches:**
    - To switch to a different branch, use the `git checkout` command followed by the branch name:
-     ```
+     ```terminal
      git checkout <branch-name>
      ```
    - Replace `<branch-name>` with the name of the branch you want to switch to.
@@ -247,7 +247,7 @@ Branching allows you to create separate lines of development. This section will 
 ### **Deleting a Branch:**
    - Once you have merged a branch into the main branch or no longer need a branch, you can delete it.
    - Use the following command to delete a branch:
-     ```
+     ```terminal
      git branch -d <branch-name>
      ```
    - Replace `<branch-name>` with the name of the branch you want to delete.
@@ -256,12 +256,12 @@ Branching allows you to create separate lines of development. This section will 
 ### **Merging Branches:**
    - Merging combines the changes from one branch into another, integrating them into the main line of development.
    - First, switch to the branch you want to merge changes into (e.g., the main branch):
-     ```
+     ```terminal
      git checkout <target-branch>
      ```
    - Replace `<target-branch>` with the name of the branch you want to merge changes into.
    - Then, use the following command to merge a specific branch into the target branch:
-     ```
+     ```terminal
      git merge <source-branch>
      ```
    - Replace `<source-branch>` with the name of the branch you want to merge into the target branch.
@@ -282,7 +282,7 @@ Git enables seamless collaboration among team members. This section will explore
 ### **Cloning a Remote Repository:**
    - To collaborate on a project, you first need to clone the remote repository to your local machine.
    - Use the following command to clone a remote repository:
-     ```
+     ```terminal
      git clone <repository-url>
      ```
    - Replace `<repository-url>` with the URL of the remote repository you want to clone.
@@ -291,7 +291,7 @@ Git enables seamless collaboration among team members. This section will explore
 ### **Pushing Changes to the Remote Repository:**
    - After making changes to the codebase, you can push your local commits to the remote repository to share your work with others.
    - Use the following command to push your commits:
-     ```
+     ```terminal
      git push origin <branch-name>
      ```
    - Replace `<branch-name>` with the name of the branch you want to push.
@@ -300,7 +300,7 @@ Git enables seamless collaboration among team members. This section will explore
 ### **Pulling Changes from the Remote Repository:**
    - To incorporate changes made by others into your local repository, you need to pull the latest updates from the remote repository.
    - Use the following command to pull changes:
-     ```
+     ```terminal
      git pull origin <branch-name>
      ```
    - Replace `<branch-name>` with the name of the branch from which you want to pull changes.
