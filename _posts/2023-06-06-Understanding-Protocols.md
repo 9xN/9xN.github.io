@@ -12,5 +12,5 @@ Protocols, the backbone that enables seamless communication across the vast land
 
 ---
 
-This article is being redone. Please check back later for updates.
-
+> This article is being redone. Please check back later for updates.
+{: .prompt-warning }
