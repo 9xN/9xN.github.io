@@ -7,15 +7,14 @@ tags: [development, coding, organization, tools, beginner]
 image: /assets/img/media/git-header.jpg
 ---
 
----
-
 Git is the most powerful and useful version control system that has revolutionized the way developers collaborate and manage code. In today's article, we will cover the basics of Git and how to get started with it. We will also discuss some best practices for using Git in your projects, as well as some useful tools for enhancing your Git workflow.
 
 ---
 
 <details>
-
-  <summary markdown="span" >## Table of Contents</summary>
+  <summary markdown="span">
+  <h2 data-toc-skip>Table of Contents</h2>
+  </summary>
 <div markdown="1">
 
 - [What is Git?](#what-is-git)
