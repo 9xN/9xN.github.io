@@ -12,9 +12,7 @@ Git is the most powerful and useful version control system that has revolutioniz
 ---
 
 <details>
-<data-toc-skip>
   <summary><strong>Table of Contents</strong></summary>
-</data-toc-skip>
 <div markdown="1">
 
 - [What is Git?](#what-is-git)
