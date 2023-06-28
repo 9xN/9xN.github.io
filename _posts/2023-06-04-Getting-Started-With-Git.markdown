@@ -12,10 +12,8 @@ Git is the most powerful and useful version control system that has revolutioniz
 ---
 
 <details>
+  <summary markdown="span"> <h2 data-toc-skip>Table of Contents</h2></summary>
 <div markdown="1">
-  <summary markdown="span">
-## Table of Contents
-  </summary>
 
 - [What is Git?](#what-is-git)
 - [Installing Git](#installing-git)
