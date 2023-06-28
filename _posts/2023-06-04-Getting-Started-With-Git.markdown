@@ -1,6 +1,6 @@
 ---
 title: "Getting Started With Git: A Comprehensive Guide for Beginners"
-author: 44
+author: fortyfour
 date: 2023-06-04 21:37
 categories: [Development, Guides]
 tags: [development, coding, organization, tools, beginner]
