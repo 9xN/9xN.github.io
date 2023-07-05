@@ -4,6 +4,7 @@ author: fortyfour
 date: 2023-07-04 23:31
 categories: [Malware, Evasion]
 tags: [malware, evasion, developement, av, edr, hooking, dll, injection, windows, c]
+mermaid: true
 image: /assets/img/media/dll-block-header.png
 ---
 
@@ -206,7 +207,7 @@ Now hopefully if everything decided to behave itself we *should* see no changes 
 _Error popup indicating the DLL failed to inject/load into **dummy_program.exe**_
 
 ![](/assets/img/media/dllblocking/before_after_injection_program.png)
-_**dummy_program.exe** still running with **DLL Blocker** and *no* change to output_
+_**dummy_program.exe** still running with **DLL Blocker** and no change to output_
 
 and finally...
 
