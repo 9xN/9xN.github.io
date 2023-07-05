@@ -196,12 +196,12 @@ Wow it feels like just 5 minutes ago we were nothing but meer skids copy and pas
 _Running **dummy_program.exe** with **DLL Blocker**_
 
 ![](/assets/img/media/dllblocking/before_injection_processexp.png)
-_Process explorer output *before* injection_
+_Process explorer output before injection_
 
 ![](/assets/img/media/dllblocking/after_injection_injector.png)
 _Injecting **AV/EDR Simulated DLL**_
 
-Now hopefully if everything decided to behave itself we *should* see no changes to our **dummy_program.exe** or in the loaded DLLs in the process explorer.
+Now hopefully if everything decided to behave itself we *should* see no changes to our **dummy_program.exe** or in the loaded DLLs monitored within process explorer.
 
 ![](/assets/img/media/dllblocking/after_injection_popup.png)
 _Error popup indicating the DLL failed to inject/load into **dummy_program.exe**_
