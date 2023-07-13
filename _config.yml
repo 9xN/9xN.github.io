@@ -13,7 +13,7 @@ baseurl: ""
 lang: en
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Asia/Shanghai
+timezone: America/Denver
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
@@ -40,19 +40,19 @@ social:
   email: 0@fbi.ac # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/44ovh # change to your twitter homepage
     - https://github.com/9xN # change to your github homepage
+    - https://twitter.com/44ovh # change to your twitter homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
 
-google_site_verification: # fill in to your verification string
+google_site_verification: bNOUtIEvtNjkHKan_PJtlwfDCZ5IOqHTzswm5tVmMC4 # fill in to your verification string
 
 # ↑ --------------------------
 # The end of `jekyll-seo-tag` settings
 
 google_analytics:
-  id: # fill in your Google Analytics ID
+  id: G-5DSG2G0WM5 # fill in your Google Analytics ID
 
 # Prefer color scheme setting.
 #
