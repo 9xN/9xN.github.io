@@ -120,6 +120,8 @@ Since the Windows API functions that we will use require wide-character strings,
 
 ```c
 const char* targetPath = argv[1];
+
+// Convert the target program path to a wide-character string
 int wideCharLen = MultiByteToWideChar(CP_UTF8, 0, targetPath, -1, NULL, 0);
 wchar_t* wideCharBuffer = new wchar_t[wideCharLen];
 MultiByteToWideChar(CP_UTF8, 0, targetPath, -1, wideCharBuffer, wideCharLen);
@@ -132,10 +134,12 @@ To provide extended information during process creation, we initialize the `STAR
 ```c
 STARTUPINFOEXA si = {};
 PROCESS_INFORMATION pi = {};
-SIZE_T size = 0;
 
+// Initialize the STARTUPINFOEXA structure
 si.StartupInfo.cb = sizeof(STARTUPINFOEXA);
 si.StartupInfo.dwFlags = EXTENDED_STARTUPINFO_PRESENT;
+
+SIZE_T size = 0;
 ```
 
 ### 4. Configuring Process Mitigation Policy:
@@ -144,8 +148,10 @@ Now here is where the magic happens.
 We enable the blocking of *non-Microsoft signed DLLs* by setting the `PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALWAYS_ON` policy (resolves to a value of 0x100000000000). This step ensures that only trusted DLLs are allowed to be loaded into the target process.
 
 ```c
+// Enable blocking of non-Microsoft signed DLLs
 DWORD64 policy = PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALWAYS_ON;
 
+// Assign the mitigation policy attribute
 UpdateProcThreadAttribute(si.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY, &policy, sizeof(policy), NULL, NULL);
 ```
 
@@ -167,11 +173,12 @@ if (!CreateProcessW(
     &pi
 ))
 {
-    fprintf(stderr
+    fprintf(stderr, "Failed to create the target process.\n");
 
-, "Failed to create the target process.\n");
-    // Cleanup and resource deallocation
-    // ...
+    // Clean up allocated resources
+    delete[] wideCharBuffer;
+    HeapFree(GetProcessHeap(), 0, si.lpAttributeList);
+
     return 1;
 }
 ```
@@ -181,10 +188,12 @@ if (!CreateProcessW(
 After the process creation, we close the process handles and deallocate the dynamically allocated resources to prevent memory leaks. This step ensures that system resources are properly released (yes I know this is a super small and simple program and this hardly has any effect on preformance or usability but we are supposed to be good programmers and this is the correct coding etiquette).
 
 ```c
+// Close the process handles
 CloseHandle(pi.hThread);
 CloseHandle(pi.hProcess);
-// Free buffers
-free(wideCharBuffer);
+
+// Clean up allocated resources
+delete[] wideCharBuffer;
 HeapFree(GetProcessHeap(), 0, si.lpAttributeList);
 ```
 
@@ -216,7 +225,7 @@ _Process explorer output showing that no other DLLs have loaded into **dummy_pro
 
 Success!
 
-## Conclusion:
+## Conclusion
 
 In this article, we explored the process of building a DLL Blocker program using C and the Windows API. By implementing process creation mitigation policies, we can effectively protect a program from potential DLL injection attacks and/or from AV/EDR hooking. However, it's important to understand the limitations of this approach. The policy we enabled in the program is effective in preventing the loading of non-Microsoft signed DLLs. However, it should be noted that it primarily applies to child processes created by the program. This means that if the program itself is already running and has loaded unauthorized DLLs, the policy may not have an immediate impact.
 
