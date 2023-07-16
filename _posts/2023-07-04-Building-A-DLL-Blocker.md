@@ -55,7 +55,7 @@ In this article, we will explore the technique of blocking these hooking process
 > You do not have to know or understand how to create a DLL or DLL Injector to follow along with this article or how the `DLL_PROCESS_ATTACH` event works. However, if you are interested in learning more about these topics, I recommend checking out the following articles: (im still working on them lol)
 {: .prompt-warning }
 
-> All of the source code for this article, including the mock DLL, injector, and dummy program are available on [GitHub](https://github.com/9xN/Patching-DLL-Entry-Points)
+> All of the source code for this article, including the mock DLL, injector, and dummy program are available on [GitHub](https://github.com/9xN/Blocking-DLLs)
 {: .prompt-info }
 
 ## Overview
