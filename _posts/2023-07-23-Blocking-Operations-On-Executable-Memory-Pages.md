@@ -121,7 +121,11 @@ As mentioned in the introduction, I was originally going to include CIG in conju
 > Memory integrity is sometimes referred to as hypervisor-protected code integrity (HVCI) or hypervisor enforced code integrity, and was originally released as part of Device Guard. Device Guard is no longer used except to locate memory integrity and VBS settings in Group Policy or the Windows registry.
 {: .prompt-info }
 
-CIG is a feature that is part of Windows Defender Application Control (WDAC) that uses virtualization-based security to prevent unsigned code from being loaded into the kernel. This is accomplished by using a hypervisor to create a virtualized environment for the kernel to run in. This virtualized environment is known as the hypervisor-enforced code integrity (HVCI) environment. The HVCI environment is isolated from the rest of the system and is protected from any unsigned code that may be running on the system. This means that any unsigned code that attempts to run in the kernel will be blocked by the hypervisor. This is a very powerful feature that can be used to prevent malicious code from running in the kernel. However, it is not without its drawbacks. For example, CIG is not compatible with all hardware and can cause system instability. Furthermore, it is not compatible with all versions of Windows 10, however it does seem to *mostly sorta work* on Windows 11.
+CIG is a feature that is part of Windows Defender Application Control (WDAC) that uses virtualization-based security to prevent unsigned code from being loaded into the kernel. This is accomplished by using a hypervisor to create a virtualized environment for the kernel to run in. This virtualized environment is known as the hypervisor-enforced code integrity (HVCI) environment. 
+
+The HVCI environment is isolated from the rest of the system and is protected from any unsigned code that may be running on the system. This means that any unsigned code that attempts to run in the kernel will be blocked by the hypervisor. 
+
+This is a very powerful feature that can be used to prevent malicious code from running in the kernel. However, it is not without its drawbacks. For example, CIG is not compatible with all hardware and can cause system instability. Furthermore, it is not compatible with all versions of Windows 10, however it does seem to *mostly sorta work* on Windows 11.
 
 ![](/assets/img/media/rwxblocking/HVCI-diagram.png)
 _Diagram of the HVCI compartmentalization_
@@ -130,7 +134,7 @@ _Diagram of the HVCI compartmentalization_
 
 In our example program we will use `VirtualAlloc()` and `VirtualProtect()`, however, there are several other Windows API functions you could use instead of these two in the code example:
 
-1. VirtualAllocEx
+- VirtualAllocEx
 
 This allocates memory in another process. You can specify executable permissions:
 
@@ -138,7 +142,7 @@ This allocates memory in another process. You can specify executable permissions
 void* mem = VirtualAllocEx(hProcess, NULL, 1024, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 ```
 
-2. NtAllocateVirtualMemory
+- NtAllocateVirtualMemory
 
 Lower level API to allocate memory with RWX permissions:
 
@@ -148,7 +152,7 @@ NtAllocateVirtualMemory(GetCurrentProcess(), &mem, 0, 1024,
   MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 ```
 
-3. VirtualProtectEx
+- VirtualProtectEx
 
 Changes permissions on an existing memory region in another process:
 
@@ -156,7 +160,7 @@ Changes permissions on an existing memory region in another process:
 VirtualProtectEx(hProcess, lpAddress, dwSize, flNewProtect, &lpflOldProtect);
 ```
 
-4. NtProtectVirtualMemory
+- NtProtectVirtualMemory
 
 Lower level API to modify protections on a memory region:
 
@@ -168,7 +172,7 @@ NtProtectVirtualMemory(hProcess, &baseAddress, &size,
   newProtection, &oldProtection);
 ```
 
-5. ZwProtectVirtualMemory
+- ZwProtectVirtualMemory
 
 Kernel-mode version of NtProtectVirtualMemory:
 
@@ -212,11 +216,18 @@ JIT engines need to generate executable code at runtime, which seems incompatibl
 
 ## Mitigating these downsides
 
-Exploit mitigation techniques like ACG aim to prevent attackers from easily executing arbitrary code during an exploitation attempt. A common exploit technique is to inject malicious shellcode into the target process's memory space. The attacker needs this memory to be writable so they can inject the code. However, they also need it to be executable to actually run the shellcode. This is where DEP (Data Execution Prevention) comes in - it prevents code execution from memory regions marked as only writable. So attackers got around this using return-oriented programming (ROP) - chaining together snippets of existing executable code to build their payload. ROP is complex and tedious though. An easier method is to change the permissions on the shellcode's memory page to make it executable after injecting it. The attacker can use API functions like `VirtualProtect()` to mark the page as executable. ACG blocks these attempts to change permissions. Any call to `VirtualProtect()` or similar to mark pages as executable will fail. Now the attacker has no choice but to fully ROP their exploit payload.
+Exploit mitigation techniques like ACG aim to prevent attackers from easily executing arbitrary code during an exploitation attempt.
+
+A common exploit technique is to inject malicious shellcode into the target process's memory space. The attacker needs this memory to be writable so they can inject the code. However, they also need it to be executable to actually run the shellcode. 
+
+This is where DEP (Data Execution Prevention) comes in - it prevents code execution from memory regions marked as only writable. So attackers got around this using return-oriented programming (ROP) - chaining together snippets of existing executable code to build their payload. ROP is complex and tedious though. 
+
+An easier method is to change the permissions on the shellcode's memory page to make it executable after injecting it. The attacker can use API functions like `VirtualProtect()` to mark the page as executable. ACG blocks these attempts to change permissions. Any call to `VirtualProtect()` or similar to mark pages as executable will fail. Now the attacker has no choice but to fully ROP their exploit payload.
 
 ## Implementation
 
 Ok, so now that we have some background information about how and what RWX is, as well as, a general understanding of ACG, lets get started with our RWX blocker program. We will start off by opening up Visual Studio and creating a new blank template project. I decided to name mine **ACG Program** but you can really put just about anything your heart desires. For this example I decided to use **C** programming language as I am fairly well versed and familiar with it but you can use any programming language you want as long as there is some sort of implementation that allows you to utilize the Windows API.
+
 Alright, now that we have a blank project open, lets get started with the code.
 
 > For the sake of simplicity I will only be importing the windows.h header file and stdio.h for some basic information logging and error printouts. However, if you are planning on using this code in a larger project or in conjuction with other code or evasion techniques I will be covering later on, you may need to import other header files as well.
