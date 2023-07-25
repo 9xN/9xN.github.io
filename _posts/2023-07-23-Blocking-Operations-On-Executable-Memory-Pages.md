@@ -1,7 +1,7 @@
 ---
 title: "Mitigating Program Tampering and Bypassing AV/EDR Through Blocking Operations on Executable Memory Pages (Part 2)"
 author: fortyfour
-date: 2023-07-24 21:31
+date: 2023-07-23 17:31
 categories: [Malware, Evasion]
 tags: [malware, evasion, developement, av, edr, hooking, dll, injection, windows, c]
 mermaid: true
