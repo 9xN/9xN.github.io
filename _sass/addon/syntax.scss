@@ -63,6 +63,7 @@ html {
     font-size: $code-font-size;
     line-height: 1.4rem;
     word-wrap: normal; /* Fixed Safari overflow-x */
+    color: var(--code-snippets-color);
   }
 
   table {
@@ -240,7 +241,7 @@ div {
   }
 }
 
-@media all and (width >= 576px) {
+@media all and (min-width: 576px) {
   div[class^='language-'] {
     .post-content > & {
       @include ml-mr(0);
