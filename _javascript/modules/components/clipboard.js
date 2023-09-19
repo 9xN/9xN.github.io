@@ -1,11 +1,3 @@
-/**
- * Clipboard functions
- *
- * Dependencies:
- *   - popper.js (https://github.com/popperjs/popper-core)
- *   - clipboard.js (https://github.com/zenorocha/clipboard.js)
- */
-
 const clipboardSelector = '.code-header>button';
 const ICON_SUCCESS = 'fas fa-check';
 const ATTR_TIMEOUT = 'timeout';
