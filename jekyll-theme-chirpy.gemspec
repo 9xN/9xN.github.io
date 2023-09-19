@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-theme-chirpy"
-  spec.version       = "6.0.1"
-  spec.authors       = ["Cotes Chung"]
-  spec.email         = ["cotes.chung@gmail.com"]
+  spec.version       = "1.0.0"
+  spec.authors       = ["9xN"]
+  spec.email         = ["0@fbi.ac"]
 
-  spec.summary       = "A minimal, responsive and feature-rich Jekyll theme for technical writing."
+  spec.summary       = "My website."
   spec.homepage      = "https://github.com/9xN/9xN.github.io"
   spec.license       = "MIT"
 
@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata = {
     "bug_tracker_uri"   => "https://github.com/9xN/9xN.github.io/issues",
     "documentation_uri" => "https://github.com/9xN/9xN.github.io/#readme",
-    "homepage_uri"      => "https://cotes2020.github.io/chirpy-demo",
+    "homepage_uri"      => "https://github.com/9xN/9xN.github.io",
     "source_code_uri"   => "https://github.com/9xN/9xN.github.io",
     "wiki_uri"          => "https://github.com/9xN/9xN.github.io/wiki",
     "plugin_type"       => "theme"
