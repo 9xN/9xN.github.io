@@ -8,7 +8,7 @@ mermaid: true
 image: /assets/img/media/shellcode-e-and-e-header.png
 ---
 
-This article will serve as an introduction into security through obscurity, by means of obfuscation in the context of evading antivirus (AV) and endpoint detection and response (EDR) systems. We will be looking at multiple different encoding methods, as well as a strong encryption algorithm known as AES-256-CBC to achieve this. Afterwards we will touch on how you can implement this technique in a real-world scenario, and how we can use it to evade AV/EDR systems.
+This article will serve as an introduction into security through obscurity, by means of obfuscation in the context of evading antivirus (AV) and endpoint detection and response (EDR) systems. We will be looking at multiple different encoding methods, a strong encryption algorithm known as AES-256-CBC, as well as various other tricks to achieve this. Afterwards we will touch on how you can implement this technique in a real-world scenario, and how we can use it to evade AV/EDR systems in your own payload.
 
 ---
 
@@ -31,27 +31,33 @@ This article will serve as an introduction into security through obscurity, by m
     - [Encryption](#encryption)
         - [AES-256-CBC](#aes-256-cbc)
 - [Program Overview](#program-overview)
-- [Understanding API Hooking and DLL Injection](#understanding-api-hooking-and-dll-injection)
-- [Implementation](#implementation)
-    - [Handling Command Line Arguments](#1-handling-command-line-arguments)
-    - [Converting the Target Program Path](#2-converting-the-target-program-path)
-    - [Initializing Process Creation Attributes](#3-initializing-process-creation-attributes)
-    - [Configuring Process Mitigation Policy](#4-configuring-process-mitigation-policy)
-    - [Creating the Target Process](#5-creating-the-target-process)
-    - [Cleanup and Resource Deallocation](#6-cleanup-and-resource-deallocation)
-    - [Profit???](#7-profit)
+- [Reading and Sanitizing Shellcode](#reading-and-sanitizing-shellcode)
+- [Encoding Techniques](#encoding-techniques)
+    - [XOR Encoding](#xor-encoding-1)
+    - [NOT Encoding](#not-encoding-1)
+    - [Rotation Encoding](#rotation-encoding-1)
+    - [Decrement Encoding](#decrement-encoding-1)
+- [AES Encryption](#aes-encryption)
+- [Printing Encoded/Encrypted Shellcode](#printing-encodedencrypted-shellcode)
 - [Conclusion](#conclusion)
 
 </div>
 </details>
 
 ## Introduction
-In this article, we will explore a program written in C that demonstrates the process of encoding and encrypting shellcode. Shellcode refers to a small piece of code that is typically used in exploitation scenarios, such as buffer overflow attacks. The program utilizes various techniques to modify and protect the shellcode, making it more difficult to detect and analyze. We will dive into each step of the program, discussing the theory behind its operations and how they contribute to the overall security of the shellcode.
+In this article, we will explore a program written in C that demonstrates the process of obfuscating shellcode in order to avoid detection by antivirus (AV) and endpoint detection and response (EDR) systems. Shellcode refers to a small piece of code that is typically used in exploitation scenarios, such as buffer overflow attacks or even process injection. The program utilizes various techniques to modify and protect the shellcode, making it more difficult to detect and analyze. We will dive into each step of the program, discussing the theory behind its operations and how they contribute to the overall security of the shellcode.
 
+> After re-writing this entire program from scratch **7 times**, you would think that I would know what the heck I am actually doing but alas this is just the start of the [scrypt](https://github.com/9xN/scrypt) project. I will be updating this article, as well as, the repository as I continue to develop the program and learn new things. With plans to expand into creating fully undetected payloads with a built in shellcode execution process utilizing some of the other techniques I have written about in the past and plan to write in the future.
+{: .prompt-warning }
 ## Theory
 
+> This section might be a little dry for most readers, so if you are just here for the meat and potatos of the article, feel free to skip ahead to the [Program Overview](#program-overview) section.
+{: .prompt-danger }
+
 ### Shellcode
-Shellcode refers to a small piece of code that is typically used in software exploits or as payload in a cyber attack. It is written in a low-level language and is designed to be directly executed by a computer's operating system. The purpose of shellcode is to provide an attacker with unauthorized access or control over a compromised system.
+> In hacking, a shellcode is a small piece of code used as the payload in the exploitation of a software vulnerability. It is called "shellcode" because it typically starts a command shell from which the attacker can control the compromised machine, but any piece of code that performs a similar task can be called shellcode. Because the function of a payload is not limited to merely spawning a shell, some have suggested that the name shellcode is insufficient. However, attempts at replacing the term have not gained wide acceptance. Shellcode is commonly written in machine code.
+- [Wikipedia](https://en.wikipedia.org/wiki/Shellcode)
+{: .prompt-info }
 
 Shellcode is often used in combination with a vulnerability or security flaw in a target system. When the vulnerability is exploited, the shellcode is injected into the system's memory, and its execution allows the attacker to gain control and perform malicious actions.
 
@@ -97,7 +103,42 @@ To decode the data, the inverse operation is applied by adding the fixed value b
 ### Encryption
 
 #### AES-256-CBC
+AES-256-CBC is a widely used symmetric encryption algorithm. AES stands for Advanced Encryption Standard, and 256 refers to the key size in bits. CBC (Cipher Block Chaining) is a mode of operation that adds an extra layer of security by chaining together blocks of data.
+
 AES-256-CBC is a symmetric encryption algorithm that operates on blocks of data. Let's break down how it works:
+
+```mermaid
+graph TD
+  subgraph Encryption
+    A[Initialize IV and Key]
+    B[Plaintext]
+    A -->|Generate IV and Key| C[IV]
+    A -->|Generate IV and Key| D[Key]
+    C -->|XOR with Plaintext| E[XOR]
+    E -->|AES Encryption| F[Ciphertext]
+    D -->|AES Encryption| F
+    B -->|Padding| G[Padded Plaintext]
+    G -->|Split into Blocks| H[Blocks]
+    H -->|AES Encryption| I[Cipher Blocks]
+    I -->|Concatenate| J[Ciphertext]
+  end
+
+  subgraph Decryption
+    K[IV]
+    D -->|Same Key as Encryption| L[Key]
+    C -->|Same IV as Encryption| K
+    F -->|AES Decryption| E
+    L -->|AES Decryption| E
+    E -->|XOR with IV| B[Decrypted Plaintext]
+  end
+
+  F -->|Ciphertext| K
+  I -->|Cipher Blocks| L
+```
+
+$$ \text{Ciphertext} = \text{AES}_{256}\text{CBC}\left(\text{Plaintext}, \text{Key}, \text{IV}\right) $$
+
+![](/assets/img/media/shellcodeobfuscation/cbc-encryption.png)
 
 1. **Key Expansion**: AES-256-CBC uses a 256-bit secret key. The key expansion algorithm takes this key and generates a set of round keys that will be used during the encryption and decryption processes.
 
@@ -115,6 +156,10 @@ AES-256-CBC is a symmetric encryption algorithm that operates on blocks of data.
 
 During decryption, the process is reversed:
 
+$$ \text{Plaintext} = \text{AES}_{256}\text{CBC}^{-1}\left(\text{Ciphertext}, \text{Key}, \text{IV}\right) $$
+
+![](/assets/img/media/shellcodeobfuscation/cbc-decryption.png)
+
 1. **Key Expansion**: The same key expansion algorithm is used to generate the round keys.
 
 2. **Decryption**: The ciphertext is divided into blocks, and the decryption process is applied to each block independently.
@@ -124,15 +169,6 @@ During decryption, the process is reversed:
 
 5. **Padding Removal**: If padding was added during encryption, it is removed to obtain the original plaintext message.
 
-AES-256-CBC provides a high level of security when implemented correctly, offering confidentiality and protection against brute-force attacks. However, it's essential to ensure proper key management, secure key distribution, and other security measures to maintain the overall integrity of the system.
-
-AES-256-CBC is a widely used symmetric encryption algorithm. AES stands for Advanced Encryption Standard, and 256 refers to the key size in bits. CBC (Cipher Block Chaining) is a mode of operation that adds an extra layer of security by chaining together blocks of data.
-
-AES-256-CBC encrypts data in blocks of 128 bits using a secret key. Each block is XORed with the previous ciphertext block before encryption, adding randomness and preventing patterns from emerging. The encryption process is repeated for each block until the entire message is encrypted.
-
-To decrypt the data, the recipient uses the same secret key and reverses the encryption process. Each block is decrypted and XORed with the previous ciphertext block to recover the original plaintext.
-
-AES-256-CBC is considered a strong encryption algorithm and is widely adopted for securing sensitive data, such as in online transactions, secure communication protocols, and data storage. It provides a high level of security when implemented correctly and with a strong key.
 ## Program Overview
 The program begins by including necessary libraries and defining some utility functions and constants. These include functions for error handling, printing banners, reading shellcode from a file, and performing encoding and encryption operations. The constants define color codes for console output.
 
@@ -159,6 +195,8 @@ After applying the encoding techniques, the program proceeds to encrypt the shel
 
 ## Printing Encoded/Encrypted Shellcode
 Once the encryption process is complete, the program prints relevant information about the encoded and encrypted shellcode. It displays the original shellcode length, the ciphertext length, and the iterations performed. The program also prints the arrays representing the encoded/encrypted shellcode, the AES key, the IV, and the XOR key. These arrays can be copied into other programs for use.
+
+## The Stub (descrypt)
 
 ## Conclusion
 This article provided a detailed explanation of the shellcode program's inner workings, step by step. It covered the encoding techniques applied to modify the shellcode and the encryption process to protect it. Understanding these techniques is essential for security professionals and researchers involved in analyzing and defending against malicious code. By utilizing encoding and encryption, the program demonstrates how to enhance the stealthiness and resilience of shellcode in various exploitation scenarios.
