@@ -49,8 +49,8 @@ In this article, we will explore a program written in C that demonstrates the pr
 
 > After re-writing this entire program from scratch **7 times**, you would think that I would know what the heck I am actually doing but alas this is just the start of the [scrypt](https://github.com/9xN/scrypt) project. I will be updating this article, as well as, the repository as I continue to develop the program and learn new things. With plans to expand into creating fully undetected payloads with a built in shellcode execution process utilizing some of the other techniques I have written about in the past and plan to write in the future.
 {: .prompt-warning }
-## Theory
 
+## Theory
 > This section might be a little dry for most readers, so if you are just here for the meat and potatos of the article, feel free to skip ahead to the [Program Overview](#program-overview) section.
 {: .prompt-danger }
 
@@ -104,6 +104,9 @@ To decode the data, the inverse operation is applied by adding the fixed value b
 
 #### AES-256-CBC
 AES-256-CBC is a widely used symmetric encryption algorithm. AES stands for Advanced Encryption Standard, and 256 refers to the key size in bits. CBC (Cipher Block Chaining) is a mode of operation that adds an extra layer of security by chaining together blocks of data.
+
+In our case we will be porting over a shrunk down version of tiny aes, which is a small and portable implementation of the AES-128, AES-192, and AES-256 encryption algorithm written in native C using nothing but the string.h library. The original source code can be found [here](https://github.com/kokke/tiny-AES-c). For our purposes we will be using the AES-256-CBC implementation and modifying it to avoid forming signatures from any other previous or future malware that might use this library as well. The reason we are utilizing this portable shrunk down version of the code we need directly is to not only shrink down the binary size but to avoid setting off any false flags that AV/EDR systems might pick up on when importing any standard crypto libraries such as openssl as seen below when we import the library into our program.
+
 
 AES-256-CBC is a symmetric encryption algorithm that operates on blocks of data. Let's break down how it works:
 
@@ -164,7 +167,8 @@ $$ \text{Plaintext} = \text{AES}_{256}\text{CBC}^{-1}\left(\text{Ciphertext}, \t
 
 2. **Decryption**: The ciphertext is divided into blocks, and the decryption process is applied to each block independently.
 
-3. **Decryption Rounds**: AES-256-CBC uses the inverse transformations of the encryption rounds to decrypt the data. These inverse operations reverse the confusion and diffusion created during encrypti
+3. **Decryption Rounds**: AES-256-CBC uses the inverse transformations of the encryption rounds to decrypt the data. These inverse operations reverse the confusion and diffusion created during encryption.
+
 4. **XOR Operation**: The IV or previous ciphertext block is XORed with the decrypted block to obtain the original plaintext block.
 
 5. **Padding Removal**: If padding was added during encryption, it is removed to obtain the original plaintext message.
